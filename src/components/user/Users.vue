@@ -61,6 +61,7 @@
               type="danger"
               icon="el-icon-delete"
               size="mini"
+              @click="removeUserById(scope.row.id)"
             ></el-button>
             <!-- 分配角色按钮 -->
             <el-tooltip
@@ -325,23 +326,44 @@ export default {
     editUserInfo() {
       this.$refs.editFormRef.validate(async (vaild) => {
         if (!vaild) {
-          return 
+          return;
         }
         //发起修改用户信息的数据请求
         const { data: res } = await this.$http.put(
           "users/" + this.editForm.id,
           { email: this.editForm.email, mobile: this.editForm.mobile }
         );
-        if(res.meta.status!=200){
-            return this.$message.error('更新用户信息失败！')
+        if (res.meta.status != 200) {
+          return this.$message.error("更新用户信息失败！");
         }
         //关闭对话框
-        this.editDialogVisible=false
+        this.editDialogVisible = false;
         //刷新数据列表
-        this.getUserList()
+        this.getUserList();
         //提示修改成功
-        return this.$message.success('更新用户信息成功！')
+        return this.$message.success("更新用户信息成功！");
       });
+    },
+
+    //根据id删除用户的信息
+    async removeUserById(id) {
+      //弹框询问用户是否删除数据
+      const confirmResult =await this.$confirm("此操作将永久删除该用户, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      }).catch(err=>{
+        return err
+      });
+      if(confirmResult !=='confirm'){
+        return this.$message.info("已取消删除")
+      }
+      const{data:res}=await this.$http.delete('users/'+id)
+      if(res.meta.status!==200){
+        return this.$message.error("删除失败！")
+      }
+      this.$message.success("删除成功！")
+      this.getUserList()
     },
   },
 };
