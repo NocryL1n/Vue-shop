@@ -11,7 +11,8 @@ import {Button,Form,FormItem,Input,Message,
         Tree,
         Select,Option,
         Cascader,
-        Alert,Tabs,TabPane} from 'element-ui'
+        Alert,Tabs,TabPane,
+        Steps,Step} from 'element-ui'
 
 
 Vue.use(Button)
@@ -44,6 +45,8 @@ Vue.use(Cascader)
 Vue.use(Alert)
 Vue.use(Tabs)
 Vue.use(TabPane)
+Vue.use(Steps)
+Vue.use(Step)
 
 Vue.prototype.$confirm=MessageBox.confirm
 Vue.prototype.$message=Message
