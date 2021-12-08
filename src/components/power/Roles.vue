@@ -338,9 +338,9 @@ export default {
       if (!node.children) {
         return arr.push(node.id);
       }
-      node.children.forEach((item) => {
+      node.children.array.forEach(item => {
         this.getLeafKeys(item, arr);
-      });
+      })
     },
 
     //监听分配权限对话框的关闭事件
