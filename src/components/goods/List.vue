@@ -48,14 +48,8 @@
             {{ scope.row.add_time | dateFormat }}
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="130px">
+        <el-table-column label="操作" width="70px">
           <template slot-scope="scope">
-            <!-- 修改按钮 -->
-            <el-button
-              type="primary"
-              icon="el-icon-edit"
-              size="mini"
-            ></el-button>
             <!-- 删除按钮 -->
             <el-button
               type="danger"
@@ -113,6 +107,7 @@ export default {
       }
       this.goodslist = res.data.goods;
       this.total = res.data.total;
+      console.log(res.data.goods)
     },
     //
     handleSizeChange(newSize) {

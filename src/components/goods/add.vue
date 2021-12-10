@@ -110,23 +110,24 @@
           </el-tab-pane>
           <el-tab-pane label="商品内容" name="4">
             <!-- 富文本编辑器 -->
-            <quill-editor v-model="addForm.goods_introduce">
-             
-            </quill-editor>
-             <!-- 添加商品的按钮 -->
-              <el-button type="primary" class="btnAdd">添加商品</el-button>
+            <quill-editor v-model="addForm.goods_introduce"> </quill-editor>
+            <!-- 添加商品的按钮 -->
+            <el-button type="primary" class="btnAdd" @click="add"
+              >添加商品</el-button
+            >
           </el-tab-pane>
         </el-tabs>
       </el-form>
     </el-card>
 
     <el-dialog title="图片预览" :visible.sync="previewVisible" width="50%">
-      <img :src="previewPath" alt="" class="previewImg">
+      <img :src="previewPath" alt="" class="previewImg" />
     </el-dialog>
   </div>
 </template>
 
 <script>
+import _ from "lodash";
 export default {
   data() {
     return {
@@ -142,7 +143,8 @@ export default {
         //图片数组
         pics: [],
         //商品的详情描述
-        goods_introduce:''
+        goods_introduce: "",
+        attrs: [],
       },
       addFormRules: {
         goods_name: [
@@ -235,7 +237,7 @@ export default {
     //处理图片预览效果
     handlePreview(file) {
       this.previewPath = file.response.data.url;
-      this.previewVisible=true
+      this.previewVisible = true;
     },
     //处理移除图片的操作
     handleRemove(file) {
@@ -255,6 +257,33 @@ export default {
       //2.将图片信息对象，push到pics数组中
       this.addForm.pics.push(picInfo);
     },
+    //添加商品
+    add() {
+      this.$refs.addFormRef.validate(async (valid) => {
+        if (!valid) {
+          return this.$message.error("请填写必要的表单项！");
+        }
+        //lodash cloneDeep(obj)进行深拷贝
+        const form = _.cloneDeep(this.addForm);
+        form.goods_cat = form.goods_cat.join(",");
+        this.manyTableData.forEach((item) => {
+          const newInfo = { attr_id: item.attr_id, attr_value: item.attr_vals };
+          this.addForm.attrs.push(newInfo);
+        });
+        this.onlyTableData.forEach((item) => {
+          const newInfo = { attr_id: item.attr_id, attr_value: item.attr_vals };
+          this.addForm.attrs.push(newInfo);
+        });
+        form.attrs = this.addForm.attrs;
+        //发起请求
+        const { data: res } = await this.$http.post("goods", form);
+        if (res.meta.status != 201) {
+          return this.$message.error("添加商品失败！");
+        }
+        this.$message.success("添加商品成功！");
+        this.$router.push("/goods");
+      });
+    },
   },
   computed: {
     cateId() {
@@ -272,11 +301,11 @@ export default {
   margin: 0 10px 0 0 !important;
 }
 
-.previewImg{
+.previewImg {
   width: 100%;
 }
 
-.btnAdd{
-  margin-top:15px;
+.btnAdd {
+  margin-top: 15px;
 }
 </style>
