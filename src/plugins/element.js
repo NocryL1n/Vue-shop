@@ -13,7 +13,7 @@ import {Button,Form,FormItem,Input,Message,
         Cascader,
         Alert,Tabs,TabPane,
         Steps,Step,
-        Checkbox,CheckboxGroup,Upload} from 'element-ui'
+        Checkbox,CheckboxGroup,Upload,} from 'element-ui'
 
 
 Vue.use(Button)
@@ -51,6 +51,8 @@ Vue.use(Step)
 Vue.use(Checkbox)
 Vue.use(CheckboxGroup)
 Vue.use(Upload)
+
+
 
 Vue.prototype.$confirm=MessageBox.confirm
 Vue.prototype.$message=Message
